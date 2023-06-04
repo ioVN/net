@@ -55,3 +55,14 @@ func NewMultipartForm(c *gin.Context) (*MultipartForm, error) {
 	}
 	return &MultipartForm{form}, nil
 }
+
+func MakeMultipartForm(c *gin.Context) (*MultipartForm, error) {
+	if err := c.Request.ParseMultipartForm(0); err != nil {
+		return nil, err
+	}
+	form, err := c.MultipartForm()
+	if err != nil {
+		return nil, err
+	}
+	return &MultipartForm{form}, nil
+}
