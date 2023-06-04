@@ -5,6 +5,8 @@ import (
 	"io"
 	"log"
 	"mime/multipart"
+
+	"github.com/gin-gonic/gin"
 )
 
 type MultipartForm struct {
@@ -41,4 +43,15 @@ func (ins *MultipartForm) GetFile(key string) []*FormFile {
 		log.Printf("MultipartForm get %s to filename: %s", key, file.Filename)
 	}
 	return list
+}
+
+func NewMultipartForm(c *gin.Context) (*MultipartForm, error) {
+	if err := c.Request.ParseMultipartForm(0); err != nil {
+		return nil, err
+	}
+	form, err := c.MultipartForm()
+	if err != nil {
+		return nil, err
+	}
+	return &MultipartForm{form}, nil
 }
